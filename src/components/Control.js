@@ -3,10 +3,6 @@ import Search from './Search';
 import Sort from './Sort';
 
 class Control extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div className="row">

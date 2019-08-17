@@ -1,18 +1,22 @@
 import React from 'react';
 import './App.css';
+import Title from './components/Title';
 import Item from './components/Item';
 import AddItem from './components/AddItem'
 import Control from './components/Control';
 import ListItem from './components/ListItem';
-import {orderBy as funcSort, remove} from 'lodash';
+import { orderBy as funcSort, remove } from 'lodash';
 import mockdata from './components/mockdata';
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    if (localStorage.getItem("InitListItem") === null) {
+      localStorage.setItem('InitListItem', JSON.stringify(mockdata));
+    }
     this.state = {
-      listItems: mockdata,
+      listItems: JSON.parse(localStorage.getItem("InitListItem")),
       strSearch: '',
       sortBy: 'name',
       sortByDir: 'asc',
@@ -37,34 +41,32 @@ class App extends React.Component {
   }
   //Delete 
   deleteItem(id) {
-    remove(this.state.listItems, function(item) {
+    remove(this.state.listItems, function (item) {
       return item.id === id;
     });
     this.setState({
       listItems: this.state.listItems
     });
+    localStorage.setItem('InitListItem', JSON.stringify(this.state.listItems));
   }
   //Update 
   editItem(id, name, priority) {
     let lsItem = this.state.listItems;
-    lsItem.forEach(function(item){
+    lsItem.forEach(function (item) {
       if (item.id === id) {
         item.name = name;
         item.priority = priority;
       }
     });
-    console.log(name,priority);
     this.setState({
       listItems: this.state.listItems
     });
+    localStorage.setItem('InitListItem', JSON.stringify(this.state.listItems));
   }
+  //add item
   addItem(name, priority) {
     var uniqid = require('uniqid');
-    //let idMax = Number.MIN_VALUE;
     let lsItem = this.state.listItems;
-    // lsItem.forEach(function(item){
-    //   idMax = Math.max(idMax, item.id)
-    // });
     lsItem.push(
       {
         id: uniqid(),
@@ -75,14 +77,18 @@ class App extends React.Component {
     this.setState({
       listItems: lsItem
     });
+    localStorage.setItem('InitListItem', JSON.stringify(this.state.listItems));
   }
 
-  render() {       
-    let itemsOrigin = this.state.listItems;
-    let items = [];
-    let { sortBy, sortByDir } = this.state;  
+  render() {
+    var storedItems = JSON.parse(localStorage.getItem("InitListItem"));
+    console.log(storedItems);
 
-    //loop list item => push Items
+    let itemsOrigin = storedItems;
+    let items = [];
+    let { sortBy, sortByDir } = this.state;
+
+    //search
     if (this.state.strSearch.length > 0) {
       itemsOrigin.forEach((item) => {
         if (item.name.includes(this.state.strSearch)) {
@@ -97,18 +103,14 @@ class App extends React.Component {
     items = funcSort(items, [sortBy], [sortByDir]);
 
     //mapping item to View
-    let item = items.map((item, idx) => <Item stt={idx + 1} key={idx + 1}
-                                        id={item.id}
-                                        name={item.name}
-                                        priority={item.priority} listItem = {this.deleteItem} editItem = {this.editItem} />)
+    let item = items.map((item, idx) => <Item stt={idx + 1} key={idx + 1} id={item.id} name={item.name}
+      priority={item.priority} listItem={this.deleteItem} editItem={this.editItem} />)
 
     return (
       <div className="container">
-        <div className="page-header">
-          <h1>ToDo List <small>ReactJS</small></h1>
-        </div>
+        <Title />
         <Control stringSearch={this.getStringSearch} typeSort={this.getTypeSort} />
-        <AddItem onClickAddItem = {this.addItem}/>
+        <AddItem onClickAddItem={this.addItem} />
         <ListItem item={item} />
       </div>
     );
