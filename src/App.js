@@ -55,7 +55,7 @@ class App extends React.Component {
     lsItem.forEach(function (item) {
       if (item.id === id) {
         item.name = name;
-        item.priority = priority;
+        item.priority = Number(priority);
       }
     });
     this.setState({
@@ -80,10 +80,8 @@ class App extends React.Component {
     localStorage.setItem('InitListItem', JSON.stringify(this.state.listItems));
   }
 
-  render() {
+  render() {  
     var storedItems = JSON.parse(localStorage.getItem("InitListItem"));
-    console.log(storedItems);
-
     let itemsOrigin = storedItems;
     let items = [];
     let { sortBy, sortByDir } = this.state;

@@ -5,14 +5,14 @@ class Item extends React.Component {
         super(props);
         this.state = {
             isEdit: false,
-            isEnable: true,
+            isDisable: true,
             input: this.props.name,
             priority: this.props.priority
         };
+
         this.editClick = this.editClick.bind(this);
         this.saveClick = this.saveClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleChangeSelect = this.handleChangeSelect.bind(this);
     }
     editClick() {
         this.setState({
@@ -25,28 +25,21 @@ class Item extends React.Component {
         this.props.editItem(id, input, priority);
         this.setState({
             isEdit: !this.state.isEdit,
-            enable: !this.state.isEdit,
-            isEnable:true
+            isDisable:true
         });
     }
     handleChange(event) {
         this.setState({
-            input: event.target.value,
-            isEnable: false
-        });
-    }
-    handleChangeSelect(event) {
-        this.setState({
-            priority: Number(event.target.value),
-            isEnable: false
+            [event.target.name]: event.target.value,
+            isDisable: false
         });
     }
 
-    render() {
-        let priority = <span className='label label-default'>Small</span>
+    render() {         
+        let priority = <span className='label label-success'>Small</span>
 
         if (this.props.priority === 1) {
-            priority = <span className='label label-warning'>Medium</span>
+            priority = <span className='label label-info'>Medium</span>
         } else if (this.props.priority === 2) {
             priority = <span className='label label-danger'>High</span>
         }
@@ -56,9 +49,9 @@ class Item extends React.Component {
                 <tr>
                     {/* form edit */}
                     <td className="text-center">{this.props.stt}</td>
-                    <td><input defaultValue={this.props.name} onChange={this.handleChange} type="text" className="form-control" /></td>
+                    <td><input defaultValue={this.props.name} name = "input" onChange={this.handleChange} type="text" className="form-control" /></td>
                     <td className="text-center">
-                        <select defaultValue = {this.props.priority} className="form-control" onChange={this.handleChangeSelect}>
+                        <select name = "priority" defaultValue = {this.props.priority} className="form-control" onChange={this.handleChange}>
                             <option value = {0}>Small</option>
                             <option value = {1}>Medium</option>
                             <option value = {2}>High</option>
@@ -66,7 +59,7 @@ class Item extends React.Component {
                     </td>
                     <td>
                         <button type="button" className="btn btn-default btn-sm" onClick={this.editClick}>Cancel</button>
-                        &nbsp;<button disabled = {this.state.isEnable} type="button" className="btn btn-success btn-sm" onClick={this.saveClick}>Save</button>
+                        &nbsp;<button disabled = {this.state.isDisable} type="button" className="btn btn-success btn-sm" onClick={this.saveClick}>Save</button>
                     </td>
                 </tr>
             );

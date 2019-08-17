@@ -11,6 +11,9 @@ class Search extends React.Component {
     }
     handleChange(event){
         this.props.str(event.target.value);
+        this.setState({
+            strSearch: event.target.value
+        });
     }
     handleClear(){
         this.props.str('');
@@ -22,7 +25,7 @@ class Search extends React.Component {
         return (
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div className="input-group">
-                    <input type="text" className="form-control" placeholder="Search item name" onChange = {this.handleChange} />
+                    <input value = {this.state.strSearch} type="text" className="form-control" placeholder="Search item name" onChange = {this.handleChange} />
                     <span className="input-group-btn">
                         <button className="btn btn-warning" type="button" onClick = {this.handleClear}>Clear</button>
                     </span>

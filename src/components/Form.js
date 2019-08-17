@@ -10,7 +10,6 @@ class Form extends React.Component {
             display: ''
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleChange1 = this.handleChange1.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit() {
@@ -34,26 +33,18 @@ class Form extends React.Component {
     }
     handleChange(e) {
         this.setState({
-            input: e.target.value
-        });
-    }
-    handleChange1(e) {
-        this.setState({
-            priority: e.target.value
+            [e.target.name]: e.target.value
         });
     }
 
     render() {
-        console.log(this.state.display);
-
         return (
             <form className="form-inline">
                 <div className="form-group">
-                    <input value={this.state.input} type="text" className="form-control" placeholder="Item Name" onChange={this.handleChange} />&nbsp;
-                    
+                    <input value={this.state.input} name = "input" type="text" className="form-control" placeholder="Item Name" onChange={this.handleChange} />&nbsp;                
                 </div>
                 <div className="form-group">&nbsp;
-                    <select className="form-control" onChange={this.handleChange1}>
+                    <select className="form-control" name = "priority" onChange={this.handleChange}>
                         <option value={0}>Small</option>
                         <option value={1}>Medium</option>
                         <option value={2}>High</option> 
